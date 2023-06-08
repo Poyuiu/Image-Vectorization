@@ -2,6 +2,13 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from io import StringIO
+from scipy import interpolate
+
+# parameters
+STEP = 4       # for smoothing
+DIST_TH = 0    # for color grouping
+PIECE_TH = 25  # for not drawing small groups
+PATH = 'emoji.png'
 
 def svg_header(width, height):
     return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' \
@@ -15,7 +22,8 @@ def dist(color1, color2):
 
 def get_closed_path(edge_points):
     dir = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-    cur = edge_points.pop(0)
+    start = edge_points.pop(0)
+    cur = start
     ans = [cur]
 
     while edge_points:
@@ -26,11 +34,25 @@ def get_closed_path(edge_points):
                 ans.append(cur)
                 break
         else: break
+    ans.append(start)
 
     return ans
 
 def smooth(edge_points):
-    return edge_points
+    ans = []
+    x = [p[0] for p in edge_points]
+    y = [p[1] for p in edge_points]
+    if len(edge_points) > 20:
+        x = x[::STEP]
+        y = y[::STEP]
+    tck, u = interpolate.splprep([x, y], k=3, s=0)
+    u_new = np.linspace(0, 1, num=1000)
+    x_new, y_new = interpolate.splev(u_new, tck)
+
+    for i in range(len(x_new)):
+        ans.append((x_new[i], y_new[i]))
+
+    return ans
 
 def png2svg(image):
     M, N, _ = image.shape
@@ -57,8 +79,8 @@ def png2svg(image):
                     neighbor = (cur[0] + dx, cur[1] + dy)
                     if neighbor[0] < 0 or neighbor[0] >= M or neighbor[1] < 0 or neighbor[1] >= N: continue
                     if visited[neighbor]: continue
-                    # give a threshold: change '!= 0' to '> 40'
-                    if dist(image[cur], image[neighbor]) != 0: continue
+                    # give a threshold
+                    if dist(image[cur], image[neighbor]) > DIST_TH: continue
                     queue.append(neighbor)
                     visited[neighbor] = 1
                 if not in_piece[cur]:
@@ -79,7 +101,7 @@ def png2svg(image):
 
     for piece, color in region:
         # not drawing small groups, will show the background color
-        # if len(piece) < 10: continue
+        if len(piece) < PIECE_TH: continue
         edge_points = piece[:]
         for x, y in piece:
             if (x+1, y) in piece and (x, y+1) in piece and (x-1, y) in piece and (x, y-1) in piece and \
@@ -100,9 +122,12 @@ def png2svg(image):
     s.write('</svg>\n')
     return s.getvalue()
 
-img = cv2.imread('emoji.png')
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-svg_image = png2svg(img)
+def main():
+    img = cv2.imread(PATH)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    svg_image = png2svg(img)
+    with open("result.svg", "w") as fh:
+        fh.write(svg_image)
 
-with open("result.svg", "w") as fh:
-    fh.write(svg_image)
+if __name__ == '__main__':
+    main()
