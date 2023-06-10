@@ -1,10 +1,5 @@
-import cv2
 import math
-import copy
 import numpy as np
-import matplotlib.pyplot as plt
-from io import StringIO
-import smooth_func
 
 
 def dist(color1, color2):
