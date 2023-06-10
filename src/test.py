@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from io import StringIO
-from smooth import smooth_zigzag_points
+import smooth_func
 from mse_template import calculate_mse
 
 def svg_header(width, height):
@@ -32,10 +32,8 @@ def get_closed_path(edge_points):
     return ans
 
 def smooth(edge_points):
-    # print(edge_points.shape)
-    # print(edge_points)
-    # return edge_points
-    return smooth_zigzag_points(zigzag_points=edge_points, smoothness=0.5)
+    return smooth_func.mean_filter(zigzag_points=edge_points, window_size=5)
+    return smooth_zigzag_points(zigzag_points=edge_points, smoothness=1)
 
 def png2svg(image):
     M, N, _ = image.shape
