@@ -50,7 +50,9 @@ def write_svg_path(s, piece, color, smooth_type=1):
     # if len(piece) < 10: continue
     edge_points = get_edge_points(piece)
     edge_points = get_closed_path(edge_points)
-    if smooth_type == 1:
+    if smooth_type == 0:
+        edge_points = edge_points
+    elif smooth_type == 1:
         edge_points = smooth_func.mean_filter(edge_points)
     else:
         edge_points = smooth_func.curve_fitting(edge_points)
@@ -63,7 +65,7 @@ def write_svg_path(s, piece, color, smooth_type=1):
     s.write('Z" stroke="none" fill="rgb(%d,%d,%d)" />\n' % color)
 
 
-def png2svg(image):
+def png2svg(image, s):
     M, N, _ = image.shape
     s = StringIO()
     s.write(svg_header(M, N))
@@ -72,7 +74,7 @@ def png2svg(image):
     regions = grid_func.get_same_color_regions(image, M, N)
 
     for piece, color in regions:
-        write_svg_path(s, piece, color, smooth_type=2)
+        write_svg_path(s, piece, color, smooth_type=s)
 
     s.write("</svg>\n")
     return s.getvalue()
