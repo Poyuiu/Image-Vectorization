@@ -8,6 +8,7 @@ import k_means
 import numpy as np
 
 
+# debug用
 def preview_piece(piece):
     x_coords = [coord[0] for coord in piece]
     y_coords = [coord[1] for coord in piece]
@@ -24,6 +25,7 @@ def preview_piece(piece):
     plt.show()
 
 
+# debug用
 def preview_images(image):
     plt.imshow(image)
     plt.show()
@@ -171,17 +173,17 @@ def png2svg(image, sm):
 
 if __name__ == "__main__":
     # Warning: notice the image path (check your workspace directory)
-    img = cv2.imread("flower.jpg")
+    img = cv2.imread("emoji_u1f1e6.png")
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     print("Doing K means clustering")
     img = k_means.coverting_img(img, 32)
-    preview_images(img)
+    # preview_images(img)
 
     print("Removing detail...")
     img = smooth_detail(img)
-    preview_images(img)
+    # preview_images(img)
 
     img = cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_RGB2BGR)
 

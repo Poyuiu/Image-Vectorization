@@ -53,10 +53,11 @@ def get_same_color_regions(image, M, N):
 
     # clear out transparent background
     """
-    for i in range(M):
-        for j in range(N):
-            if image[i,j,3]==0:
-                visited[i][j] = True
+    if image.shape[2] == 4:
+        for i in range(M):
+            for j in range(N):
+                if image[i,j,3] < 5:
+                    visited[i][j] = True
     """
 
     for i in range(M):
