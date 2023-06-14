@@ -5,7 +5,7 @@ import smooth_func
 import grid_func
 
 
-def svg_header(width, height):
+def svg_header(height, width):
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n'
         '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"\n'
@@ -62,7 +62,7 @@ def write_svg_path(s, piece, color, smooth_type=1):
     s.write(f"M {start[1]} {start[0]} ")
     for p in edge_points:
         s.write(f"L {p[1]} {p[0]} ")
-    s.write(f'Z" stroke="none" fill="rgb({color[2]},{color[1]},{color[0]})" />\n')
+    s.write(f'Z" stroke="none" fill="rgb({color[0]},{color[1]},{color[2]})" />\n')
 
 
 def png2svg(image, sm):
