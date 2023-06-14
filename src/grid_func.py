@@ -20,7 +20,7 @@ def get_piece_color_from_same_color_grid(image, M, N, start_i, start_j, visited)
     queue = [(start_i, start_j)]
     while queue:
         cur_point = queue.pop(0)
-        
+
         for dx, dy in CORNERS:
             corner_point = (cur_point[0] + dx, cur_point[1] + dy)
             # Can svg use the points out of bound?
@@ -50,19 +50,19 @@ def get_piece_color_from_same_color_grid(image, M, N, start_i, start_j, visited)
 def get_same_color_regions(image, M, N):
     visited = [[False] * N for _ in range(M)]
     regions = []
-    
-    #clear out transparent background
-    '''
+
+    # clear out transparent background
+    """
     for i in range(M):
         for j in range(N):
             if image[i,j,3]==0:
                 visited[i][j] = True
-    '''            
+    """
+
     for i in range(M):
         for j in range(N):
             if not visited[i][j]:
                 # get same color grid by BFS
-                regions.append(
-                    get_piece_color_from_same_color_grid(image, M, N, i, j, visited)
-                )
+                r = get_piece_color_from_same_color_grid(image, M, N, i, j, visited)
+                regions.append(r)
     return regions
