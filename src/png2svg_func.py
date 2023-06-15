@@ -151,7 +151,7 @@ def smooth_detail(img):
                         break
             img[i, j] = max_color
 
-    return img
+    return img.astype(np.uint8)
 
 
 def png2svg(image, sm):
@@ -173,8 +173,7 @@ def png2svg(image, sm):
 
 if __name__ == "__main__":
     # Warning: notice the image path (check your workspace directory)
-    img = cv2.imread("flower.jpg")
-
+    img = cv2.imread("emoji_u1f3e1.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     print("Doing K means clustering")
@@ -190,5 +189,8 @@ if __name__ == "__main__":
     print("Converting to svg file")
     svg_image = png2svg(img, 1)
 
-    with open("result.svg", "w") as fh:
+    with open(
+        "result.svg",
+        "w",
+    ) as fh:
         fh.write(svg_image)
