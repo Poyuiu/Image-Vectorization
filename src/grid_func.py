@@ -1,10 +1,29 @@
 import math
 import numpy as np
+import copy
 
 
 def dist(color1, color2):
     # return sum((color1 - color2) ** 2) ** 0.5  # Euclidean distance
     return sum(np.abs(color1 - color2))
+
+
+def get_region_area(piece):
+    edge_points = np.array(list(copy.deepcopy(piece)))
+    min_x, min_y = np.min(edge_points, axis=0)
+    max_x, max_y = np.max(edge_points, axis=0)
+    point_on_xy = np.zeros((max_x - min_x + 1, max_y - min_y + 1))
+
+    for x, y in piece:
+        point_on_xy[x - min_x, y - min_y] = 1
+
+    area = 0
+    for row in point_on_xy:
+        first_one = np.where(row == 1)[0][0]
+        last_one = np.where(row == 1)[0][-1]
+        area = area + last_one - first_one + 1
+
+    return area
 
 
 def get_piece_color_from_same_color_grid(image, M, N, start_i, start_j, visited):
@@ -43,8 +62,8 @@ def get_piece_color_from_same_color_grid(image, M, N, start_i, start_j, visited)
                 continue
             visited[next_point[0]][next_point[1]] = True
             queue.append(next_point)
-
-    return list(pieces), cur_color
+    area = get_region_area(list(pieces))
+    return list(pieces), cur_color, area
 
 
 def get_same_color_regions(image, M, N):
