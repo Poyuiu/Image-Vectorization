@@ -162,7 +162,7 @@ def png2svg(image, sm):
     # collect contiguous pixel groups by traversing image
     regions = grid_func.get_same_color_regions(image, M, N)
 
-    regions = sorted(regions, key=lambda x: len(x[0]), reverse=True)
+    #regions = sorted(regions, key=lambda x: len(x[0]), reverse=False)
 
     for piece, color in regions:
         write_svg_path(s, piece, color, smooth_type=sm)
@@ -173,7 +173,7 @@ def png2svg(image, sm):
 
 if __name__ == "__main__":
     # Warning: notice the image path (check your workspace directory)
-    img = cv2.imread(r"C:\Users\user\Documents\GitHub\Image-Vectorization\src\emoji_u1f3f5.png")
+    img = cv2.imread(r"C:\Users\ryanp\D_\multimedia\Image-Vectorization\Image-Vectorization\png\128\emoji_u002a_20e3.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     print("Doing K means clustering")
@@ -182,12 +182,12 @@ if __name__ == "__main__":
 
     print("Removing detail...")
     img = smooth_detail(img)
-    # preview_images(img)
+    #preview_images(img)
 
-    # img = cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_RGB2BGR)
+    img = cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
     print("Converting to svg file")
     svg_image = png2svg(img, 1)
 
-    with open(r"C:\Users\user\Documents\GitHub\Image-Vectorization\src\result.svg", "w") as fh:
+    with open(r"C:\Users\ryanp\D_\multimedia\Image-Vectorization\Image-Vectorization\src\result.svg", "w") as fh:
         fh.write(svg_image)
