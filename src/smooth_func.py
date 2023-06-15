@@ -11,11 +11,8 @@ def curve_fitting(zigzag_points, smoothness=0.5):
     y = [point[1] for point in zigzag_points]
 
     tck, u = splprep([x, y], s=smoothness)
-
     u_new = np.linspace(u.min(), u.max(), len(zigzag_points) * 30)
-
     x_smooth, y_smooth = splev(u_new, tck)
-
     smooth_points = [(x, y) for x, y in zip(x_smooth, y_smooth)]
 
     return smooth_points
