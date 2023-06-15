@@ -11,7 +11,8 @@ import mse_func
 directory = '../png/128'
 
 total = 0
-file_num = len(os.listdir(directory))  # 3458
+# file_num = len(os.listdir(directory))  # 3458
+cnt = 0
 
 for filename in os.listdir(directory):
     original = cv2.imread(directory + '/' + filename)
@@ -28,6 +29,9 @@ for filename in os.listdir(directory):
     result = cv2.imread('result.png')
     MSE = mse_func.calculate_mse(original, result)  # BGR
     total += MSE
-    # print(f'{filename}: MSE = {MSE}')
+    print(f'{filename}: MSE = {MSE}')
+
+    cnt += 1
+    if cnt == 5: break
     
-print(f'Average MSE of all the png files: {total / file_num}')
+# print(f'Average MSE of all the png files: {total / file_num}')
