@@ -3,7 +3,6 @@ import numpy as np
 
 
 def dist(color1, color2):
-    # return sum((color1 - color2) ** 2) ** 0.5  # Euclidean distance
     return sum(np.abs(color1 - color2))
 
 
